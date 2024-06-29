@@ -1,0 +1,16 @@
+[vyos]
+192.168.0.121
+
+
+
+
+- hosts: vyos
+  tasks:
+    - name: Gather facts from VyOS routers
+      vyos.vyos.vyos_facts:
+        gather_subset: all
+
+
+
+ansible-playbook -i inventory.ini vyos_vm_info.yml
+

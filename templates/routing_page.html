@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VyProx | Routing</title>
+    <link rel="icon" type="image/x-icon" sizes="32x32" href="{{ url_for('static', filename='css/VyProx-01.svg') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main1.css') }}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+    <div class="navbar">
+        
+        <img src="static\css\VyProx-07.svg" alt="">
+        <i class='bx bx-menu' id="menu"></i>
+    
+    
+    <ul class="navlsit">
+        <li>
+            
+            <a href="/index">
+                <i class='bx bx-at'></i>
+                <span class="links_name">Interfaces</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="#">
+                <i class='bx bx-transfer-alt'></i>
+                <span class="links_name">Routing</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="/nat">
+                <i class='bx bxs-book-content'></i>
+                <span class="links_name">NAT</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="/https">
+                <i class='bx bx-code-alt'></i>
+                <span class="links_name">API</span>
+            </a>
+        </li>
+        <li>            
+            <a href="/vpn">
+                <i class='bx bx-wifi'></i>
+                <span class="links_name">VPN</span>
+            </a>
+        </li>
+        <li>            
+            <a href="/firewall">
+                <i class='bx bxs-hot'></i>
+                <span class="links_name">Firewall</span>
+            </a>
+        </li>
+        <li>
+                
+            <a href="/system_info">
+                <i class='bx bxs-user'></i>
+                <span class="links_name">Users</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="/ntp">
+                <i class='bx bxs-time-five' ></i>
+                <span class="links_name">NTP</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="/ssh">
+                <i class='bx bxs-terminal'></i>
+                <span class="links_name">SSH</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="/">
+                <i class='bx bx-log-out-circle'></i>
+                <span class="links_name">LogOut</span>
+            </a>
+        </li>
+    </ul>
+    
+    
+</div>
+<style>
+    body{
+        text-align: center;
+        overflow: hidden;
+    }
+    table{
+        text-align: center;
+        margin: auto;
+        table-layout: fixed; 
+        width: 600px; 
+        margin-top: 50px;
+    }
+    .home_content{
+        margin-top: 10px;
+    }
+    
+</style>
+    <div class="home_content" id="home_content">
+        <h1>Routing informations</h1>
+        
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Protocol</th>
+                    <th>Route</th>
+                    <th>Next Hop</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for protocol, routes in routing_data['data'].items() %}
+                {% for route, next_hops in routes['route'].items() %}
+                {% for next_hop, _ in next_hops['next-hop'].items() %}
+                <tr>
+                <td>{{ protocol }}</td>
+                <td>{{ route }}</td>
+                <td>{{ next_hop }}</td>
+                <td>
+                    <form action="/delete_routing" method="post">
+                        <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                        <input type="hidden" name="route_val" value="{{ route }}">
+                        <input class="btn_del" type="submit" value="Delete route">
+                    </form>
+                </td>
+                </tr>
+                {% endfor %}
+                {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="conf_min">
+        
+            <form action="/configure_routing" method="post">
+                <div class="wrap">
+                    <h2>Configure Routing</h2>
+                <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                
+                
+                <div class="input_box">
+                    <input type="text" name="net_route" placeholder="Route (Network)">
+                    <i class='bx bx-network-chart'></i>
+                </div>
+                <div class="input_box">
+                    <input type="text" name="route_next_hop" placeholder="Next hop">
+                    <i class='bx bx-skip-next-circle'></i>
+                </div>
+                
+                <input type="submit" value="Configure Route" id="sub">
+                </div>
+                
+            </form>
+        
+        
+        
+        
+    
+    </div>
+    <div id="saver">
+            
+        <form action="/save_config" method="post">
+            <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+            <button type="submit"><i title="Save configuration" class='bx bx-save'></i></button>
+            
+        </form>    
+        
+    </div>
+    <div id="alert-container"></div>
+    </div>
+
+
+
+    <script>
+        
+        function showAlert(message, success) {
+            var alertDiv = document.createElement('div');
+            alertDiv.className = success ? 'alert-success' : 'alert-danger';
+            alertDiv.innerHTML = message;
+            document.getElementById('alert-container').appendChild(alertDiv);
+            setTimeout(function() {
+                alertDiv.remove();
+            }, 3000);
+        }
+
+       
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        
+        var loader = document.createElement('div');
+        loader.className = 'loader';
+        document.getElementById('home_content').appendChild(loader);
+
+        var formData = new FormData(form);
+        var response = await fetch(form.action, {
+            method: form.method,
+            body: formData
+        });
+        var responseData = await response.json();
+        
+        
+        loader.remove();
+
+        
+        showAlert(responseData.message, responseData.success);
+    });
+});
+
+    </script>
+    <script>
+        let menu = document.querySelector('#menu')
+        let navbar = document.querySelector('.navbar')
+
+        menu.onclick = function(){
+            navbar.classList.toggle("active");
+        }
+    </script>
+</body>
+</html>

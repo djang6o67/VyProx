@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VyProx | Access</title>
+    <link rel="icon" type="image/x-icon" sizes="32x32" href="{{ url_for('static', filename='css/VyProx-01.svg') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main1.css') }}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    
+</head>
+
+<body>
+    <style>
+        body{
+        text-align: center;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        height: auto;
+        
+    }
+    .contenu{
+        margin: auto;
+        position: relative;
+        bottom: 130px;
+        
+    }
+    img{
+        display: block;
+        width: 800px;
+        height: 400px;
+        padding: 0;
+        position: relative;
+        margin: auto;
+        bottom: 120px;
+    }
+    #desc_bx{
+        position: absolute;
+        left: 0;
+        top: 0;
+        text-decoration: none;
+        color: #333;;
+        width: 150px;
+        margin-top: 10px;
+        margin-left: 10px;
+        background-color: white;
+        border-radius: 10px;
+        padding: 5px;
+        transition: all 0.5s ease;
+    }
+    #desc_bx:hover{
+        
+        color: white;
+        
+        background-color: #333;
+        
+    }
+    </style>
+
+    <img src="{{ url_for('static', filename='css/VyProx-07.svg') }}" alt="logol">
+    <a target="_blank" id="desc_bx" href="static/css/tech_doc.pdf"><i class='bx bx-detail'></i> Documentation</a>
+    <div class="contenu">
+        
+        <h1>Choose VM IP</h1>
+    <div id="base">
+        <form action="/submit_ip" method="post">
+            
+            <div class="input_boxh">
+                <select name="vyos_ip" id="vyos_ip" onchange="showManualInput()">
+                    <option value="walo">Select an IP</option>
+                    {% for vm_id, vm_name, ip_address in vm_info %}
+                    <option value="{{ ip_address }}">{{ vm_id }} - {{ vm_name }} - {{ ip_address }}</option>
+                    {% endfor %}
+                </select>
+                <div class="selh">
+                    <i class='arrow-icon bx bx-chevron-down'></i>
+                    
+                </div>
+            </div>
+            
+
+           <div id="key1" class="input_box">
+
+            <input type="text" name="key" placeholder="Enter the key" required>
+            <i class='bx bxs-key'></i>
+           </div>
+            
+            
+            <input id="autoip" type="submit" value="Submit">
+        </form>
+    </div>
+    
+
+    <div id="manual_ip_input" style="display: none;">
+        <form action="/submit_manual_ip" method="post">
+            
+            <div class="input_box">
+                
+                <input type="text" name="manual_ip" id="manual_ip" placeholder="Enter Manual IP Address" required>
+                <i class='bx bx-at'></i>
+            </div>
+            
+            <div id="key2" class="input_box">
+                <input type="text" name="key" placeholder="Enter the key" required>
+                <i class='bx bxs-key'></i>
+            </div>
+            
+            
+            <input type="submit" value="Submit" id="sub">
+        </form>
+        
+    </div>
+
+    </div>
+    
+    
+    <script>
+        function showManualInput() {
+            var select = document.getElementById("vyos_ip");
+            var manualInput = document.getElementById("manual_ip_input");
+            var autoInput = document.getElementById("autoip");
+            var cle1 = document.getElementById("key1");
+            var cle2 = document.getElementById("key2");
+            if (select.value === "No IP") {
+                autoInput.style.display = "none";
+                manualInput.style.display = "block";
+                cle1.style.display = "none";
+                cle2.style.display = "block";
+            } 
+
+            else if (select.value === "walo"){
+                manualInput.style.display = "none";
+                autoInput.style.display = "none";
+                cle1.style.display = "none";
+                cle2.style.display = "none";
+            }
+            else {
+                manualInput.style.display = "none";
+                autoInput.style.display = "block";
+                cle1.style.display = "block";
+                cle2.style.display = "none";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var manualInput = document.getElementById("manual_ip_input");
+            var autoInput = document.getElementById("autoip");
+            var cle1 = document.getElementById("key1");
+            var cle2 = document.getElementById("key2");
+            autoInput.style.display = "none";
+            manualInput.style.display = "none";
+            cle1.style.display = "none";
+            cle2.style.display = "none";
+        })
+    </script>
+
+
+
+</body>
+</html>

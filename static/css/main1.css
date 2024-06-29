@@ -1,0 +1,761 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
+
+*{
+  /* color: white; */
+  scrollbar-color: #666 rgba(16,16,16,1);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Oswald", sans-serif;
+  
+  
+}
+body{
+    /* background-image: url("bg2.jpg"); */
+    margin: 0;
+    padding: 0;
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    color: white;
+    background:
+    radial-gradient(circle, rgba(25,47,23,1) 0%, rgba(16,16,16,1) 44%);
+    
+    background-attachment: fixed;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    text-align: center;
+    
+}
+
+body:before {
+  margin: 0;
+  padding: 0;
+  background-image: url(noise-effect.png);
+  background-attachment: fixed;
+  content: "";
+  /* height: 100%; */
+  left: 0;
+  bottom: 0;
+  opacity: .03;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -1;
+  min-height: 1100px;
+}
+
+/* Style the navigation bar */
+.navbar {
+  
+  background-color: #333;
+  height: 100vh;
+  width: 78px;
+  position: fixed;
+  top: 0;
+  left:0 ;
+  padding-left: 1px;
+  padding-top: 6px;
+  padding-right: 3px;
+  padding-bottom: 6px;
+  transition: all 0.5s ease;
+}
+
+
+.navbar.active{
+  width: 240px;
+}
+
+
+.navbar.active .links_name{
+  opacity: 1;
+}
+
+.navbar .links_name{
+  opacity: 0;
+  
+}
+
+.navbar #menu{
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  font-size: 20px;
+  height: 40px;
+  width: 40px;
+  text-align: center;
+  line-height: 50px;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
+
+.navbar.active #menu{
+  opacity: 1;
+  left: 90%;
+  cursor: pointer;
+}
+
+
+.navbar  img{
+  padding: 0;
+  margin: 0;
+  position: relative;
+  bottom: 50px;
+  
+  right: 20px;
+  height: 150px;
+  width: 150px;
+  opacity: 0;
+  transition: all 0.5s ease;
+}
+
+.navbar.active img{
+  opacity: 1;
+}
+
+
+
+
+/* .navbar.active .logo_content img{
+
+} */
+.navbar ul{
+  margin-top: 0;
+  position: relative;
+  bottom: 90px;
+  /* top: 20px; */
+}
+
+
+
+.navbar ul li{
+  list-style: none;
+  height: 58px;
+  width: 100%;
+  margin-right: 0;
+  position: relative;
+  
+}
+
+
+.navbar ul li a{
+  
+  display: flex;
+  color: white;
+  align-items: center;
+  text-align: center;
+  padding: 4px 12px;
+  text-decoration: none;
+  line-height: 40px;
+  transition: all 0.5s ease;
+  border-radius: 12px;
+  height : 53px
+}
+
+
+.navbar ul li a:hover{
+  background-color: #ddd;
+  color: #666;
+}
+
+
+.navbar.active ul li a:hover{
+  background-color: #ddd;
+  color: #666;
+}
+
+.navbar ul li a i{
+  
+  height: 50px;
+  min-width: 50px;
+  border-radius: 12px;
+  line-height: 50px;
+  text-align: center;
+}
+
+
+
+
+.home_content{
+  position: absolute;
+  height: 100vh;
+  width: calc(100% - 78px);
+  left: 78px;
+  transition: all 0.5s ease;
+  /* top: 20px; */
+  margin-top: 0;
+}
+
+.navbar.active ~ .home_content{
+  width: calc(100% - 240px);
+  left: 240px;
+}
+
+
+
+
+
+
+
+  
+  .loader::before {
+    content: "";
+    position: absolute;
+    background: var(--loader-color);
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    border-radius: 30px;
+    animation: moving 1s ease-in-out infinite;
+    ;
+  }
+  
+  @keyframes moving {
+    50% {
+      width: 100%;
+    }
+  
+    100% {
+      width: 0;
+      right: 0;
+      left: unset;
+    }
+  }
+
+
+
+table {
+    border-collapse: collapse;
+    border: solid;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    /* min-width: 400px; */
+    margin: auto;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    
+}
+table thead tr {
+  /* background-color: #009879; */
+  color: #ffffff;
+  text-align: left;
+}
+table th,
+table td {
+  
+    padding: 12px 15px;
+}
+
+table th{
+  text-align: center;
+  background: rgb(60,60,60);
+  background: linear-gradient(90deg, rgba(60,60,60,0.5) 27%, rgba(102,102,102,0.5) 65%, rgba(189, 189, 189, 0.5) 100%);
+}
+
+table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+
+
+
+
+
+
+input[type="submit"], select{
+  background: rgb(60,60,60);
+  background: linear-gradient(90deg, rgba(60,60,60,0.2) 27%, rgba(102,102,102,0.2) 65%, rgba(189, 189, 189, 0.189) 100%);
+  color: white;
+}
+
+
+select option{
+  background-color: #6d6d6d;
+}
+
+input[type="text"]{
+  background-color: #6d6d6d;
+  color: white;
+}
+
+.navbar ul li a[href='#']{
+  background-color: #ddd;
+  color: #666;
+
+
+}
+
+
+ .conf{
+  display: flex;
+  flex-direction: row;
+  
+  
+  /* width: 1000px; */
+  margin-bottom: -10px;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+
+  padding: 15px;
+  
+  
+} 
+
+.conf_min, .desc, .delete, .configure{
+  
+  display: block;
+  width: 400px;
+  height: auto;
+  margin-bottom: 50px;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  border: solid white;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+
+.desc, .delete, .configure{
+  
+  display: block;
+  width: 500px;
+  height: auto;
+  margin-bottom: 50px;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  border: solid white;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+
+.auth_conf, .peer_conf{
+  
+  display: block;
+  width: 450px;
+  height: auto;
+  margin-bottom: 50px;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  border: solid white;
+  padding: 15px;
+  border-radius: 10px;
+}
+.delete, .configure, .auth_conf,.peer_conf{
+  margin-right: 10px;
+}
+
+.desc .input_box i, .delete .input_box i, .configure .input_box i{ /*styling des logos*/
+  position: relative;
+  font-size: 20px;
+  bottom: 30px;
+  left: 130px;
+  transition: all 0.5s ease;
+}
+
+
+.auth_conf .input_box i, .peer_conf .input_box i{ /*styling des logos*/
+  position: relative;
+  font-size: 20px;
+  bottom: 30px;
+  left: 150px;
+  transition: all 0.5s ease;
+}
+
+.input_box div.sel{ /*styling des logos*/
+  display: inline;
+  position: relative;
+  font-size: 20px;
+  bottom: 5px;
+  right: 12px;
+  transition: all 0.5s ease;
+}
+
+
+.navbar.active ~ .home_content .conf .configure .input_box i{
+  position: relative;
+  font-size: 20px;
+  bottom: 30px;
+  left: 110px;
+}
+
+.navbar.active ~ .home_content .conf .delete .input_box i{
+  position: relative;
+  font-size: 20px;
+  bottom: 30px;
+  left: 110px;
+}
+.navbar.active ~ .home_content .conf .desc .input_box i{
+  position: relative;
+  font-size: 20px;
+  bottom: 30px;
+  left: 110px;
+  
+}
+
+
+.navbar.active ~ .home_content .conf .peer_conf .input_box i{
+  position: relative;
+  font-size: 20px;
+  bottom: 30px;
+  left: 150px;
+  
+}
+.navbar.active ~ .home_content .conf .auth_conf .input_box i{
+  position: relative;
+  font-size: 20px;
+  bottom: 30px;
+  left: 150px;
+  
+}
+
+.input_box i{ 
+  position: relative;
+  font-size: 20px;
+  bottom: 30px;
+  left: 150px;
+}
+
+
+
+.loader {
+    display: block;
+    --height-of-loader: 4px;
+    --loader-color: #0071e2;
+    width: 130px;
+    height: var(--height-of-loader);
+    border-radius: 30px;
+    background-color: rgba(0,0,0,0.2);
+    position: relative;
+    margin: auto;
+    margin-top: 10px;
+    
+  }
+
+  #alert-container{
+    position: relative;
+  }
+  
+
+
+
+
+
+
+
+
+.input_box{
+  margin: 10px auto;
+  width: 100%;
+  height: 40px;
+}
+
+input::placeholder{
+  color: white;
+}
+
+
+.input_box input{ /*styling du input*/
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  border: 2px solid rgba(255, 255, 255, .2);
+  border-radius: 40px;
+  font-size: 16px;
+  color: #fff;
+  padding: 20px 45px 20px 20px;
+  background-color: transparent;
+}
+
+.input_box select{ /*styling du input*/
+  width: 100%;
+  height: 100%;
+ 
+ 
+  border-radius: 20px;
+  font-size: 16px;
+  color: #fff;
+  padding-left:20px;
+  appearance: none;
+}
+
+
+.input_box select option{ /*styling du input*/
+  width: 100%;
+  height: 100%;
+
+  padding: 50px;
+  border-radius: 20px;
+  font-size: 16px;
+  color: #fff;
+  
+}
+
+
+
+#sub, #autoip{
+  width: 80%;
+    height: 40px;
+    background: #fff;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+    cursor: pointer;
+  transition: all 0.3s ease;
+  margin: auto;
+}
+
+#sub:hover, #autoip:hover{
+  background :linear-gradient(90deg, rgba(60,60,60,0.2) 27%, rgba(102,102,102,0.2) 65%, rgba(189, 189, 189, 0.189) 100%); /*changement de couleur lors du hover sur le bouton*/
+  color: white;
+  
+}
+
+#sub_tun{
+  width: 80%;
+    height: 30px;
+    background: #fff;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    font-weight: 600;
+    cursor: pointer;
+  transition: all 0.3s ease;
+  margin: auto;
+}
+.tun_form{
+  width: 130%;
+}
+
+.box_inp{
+  margin: 10px auto;
+  width: 100%;
+  height: 40px;
+}
+
+
+.box_inp input{ /*styling du input*/
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  border: 2px solid rgba(255, 255, 255, .2);
+  border-radius: 40px;
+  font-size: 16px;
+  color: #fff;
+  padding: 20px 45px 20px 20px;
+  background-color: transparent;
+}
+
+
+
+#sub_tun:hover{
+  background :linear-gradient(90deg, rgba(60,60,60,0.2) 27%, rgba(102,102,102,0.2) 65%, rgba(189, 189, 189, 0.189) 100%); /*changement de couleur lors du hover sur le bouton*/
+  color: white;
+  
+}
+
+
+#saver{
+  
+  text-align: center;
+  display: block;
+  width: 50px;
+  position: absolute;
+  height: 70px;
+  bottom: 560px;
+  left: 10px;
+}
+
+
+
+#saver button i{
+  
+  font-size: 40px;
+  color: white;
+  transition: all 0.5s ease;
+
+}
+
+
+#saver button i:hover{
+  cursor: pointer;
+  color: #666;
+
+}
+
+#saver button{
+  
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: none;
+}
+
+
+
+
+
+
+#add_tun{
+  
+  text-align: center;
+  display: block;
+  width: 50px;
+  position: absolute;
+  height: 70px;
+  bottom: 574px;
+  left: 70px;
+}
+
+
+
+#add_tun button i{
+  
+  font-size: 40px;
+  color: white;
+  transition: all 0.5s ease;
+
+}
+
+
+#add_tun button i:hover{
+  cursor: pointer;
+  color: #666;
+
+}
+
+#add_tun button{
+  
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: none;
+}
+
+
+
+
+
+
+.contenu{
+  display: block;
+  width: 400px;
+  height: auto;
+  margin-bottom: 50px;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  border: solid white;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+
+
+
+
+
+
+
+.input_boxh{
+  margin: 10px auto;
+  width: 100%;
+  height: 40px;
+}
+
+
+
+
+.input_boxh input{ /*styling du input*/
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  border: 2px solid rgba(255, 255, 255, .2);
+  border-radius: 40px;
+  font-size: 16px;
+  color: #fff;
+  padding: 20px 45px 20px 20px;
+  background-color: transparent;
+}
+
+.input_boxh select{ /*styling du input*/
+  width: 100%;
+  height: 100%;
+
+ 
+  border-radius: 20px;
+  font-size: 16px;
+  color: #fff;
+  padding-left:20px;
+  appearance: none;
+}
+
+
+.input_boxh select option{ /*styling du input*/
+  width: 100%;
+  height: 100%;
+  /* background: transparent;
+  border: none;
+  outline: none; */
+  padding: 50px;
+  border-radius: 20px;
+  font-size: 16px;
+  color: #fff;
+  
+}
+
+
+
+.input_boxh i{ /*styling des logos*/
+  position: relative;
+  font-size: 20px;
+  bottom: 30px;
+  left: 130px;
+  transition: all 0.5s ease;
+}
+
+
+.input_boxh div.selh{ /*styling des logos*/
+  display: inline;
+  position: relative;
+  font-size: 20px;
+  bottom: 5px;
+  right: 0;
+  left: 20px;
+  transition: all 0.5s ease;
+}
+
+
+
+.btn_del{
+  width: 100px;
+  height: 30px;
+  border-radius: 10px;
+  transition: all 0.5s ease;
+}
+.btn_del:hover{
+  cursor: pointer;
+  background-color: #ddd;
+  color: #333;
+}

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VyProx | Firewall</title>
+    <link rel="icon" type="image/x-icon" sizes="32x32" href="{{ url_for('static', filename='css/VyProx-01.svg') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main1.css') }}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+    <div class="navbar">
+        
+        <img src="static\css\VyProx-07.svg" alt="">
+        <i class='bx bx-menu' id="menu"></i>
+    
+    
+    <ul class="navlsit">
+        <li>
+            
+            <a href="/index">
+                <i class='bx bx-at'></i>
+                <span class="links_name">Interfaces</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="/routing">
+                <i class='bx bx-transfer-alt'></i>
+                <span class="links_name">Routing</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="nat">
+                <i class='bx bxs-book-content'></i>
+                <span class="links_name">NAT</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="/https">
+                <i class='bx bx-code-alt'></i>
+                <span class="links_name">API</span>
+            </a>
+        </li>
+        <li>            
+            <a href="/vpn">
+                <i class='bx bx-wifi'></i>
+                <span class="links_name">VPN</span>
+            </a>
+        </li>
+        <li>            
+            <a href="#">
+                <i class='bx bxs-hot'></i>
+                <span class="links_name">Firewall</span>
+            </a>
+        </li>
+        <li>
+                
+            <a href="/system_info">
+                <i class='bx bxs-user'></i>
+                <span class="links_name">Users</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="/ntp">
+                <i class='bx bxs-time-five' ></i>
+                <span class="links_name">NTP</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="/ssh">
+                <i class='bx bxs-terminal'></i>
+                <span class="links_name">SSH</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="/">
+                <i class='bx bx-log-out-circle'></i>
+                <span class="links_name">LogOut</span>
+            </a>
+        </li>
+    </ul>  
+    
+</div>
+<style>
+    body{
+        text-align: center;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        height: auto;
+    }
+    
+    table{
+        text-align: center;
+        margin: auto;
+        table-layout: fixed; 
+        width: 600px; 
+        margin-top: 40px;
+    }
+    .home_content{
+        margin-top: 10px;
+    }
+    #saver{
+        bottom: 560px;
+        left: 10px;
+    }
+    
+</style>
+<div class="home_content" id="home_content">
+    <h1>Firewall informations</h1>
+    {% if firewall_data %}
+        {% if inbound_rules %}
+            <table border="1">
+                
+                <thead>
+                    <tr>
+                        <th colspan="5">Inbound Rules</th>
+                    </tr>
+                    <tr>
+                        <th>Rule number</th>
+                        <th>Rule action</th>
+                        <th>Protocol's port</th>
+                        <th>Protocol's name (description)</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    {% for in_rule in inbound_rules %}
+                    <tr>
+                        <td>{{ in_rule }}</td>
+                        <td>{{ inbound_rules[in_rule]['action'] }}</td>
+                        <td>{{ inbound_rules[in_rule]['destination']['port'] }}</td>
+                        <td>{{ inbound_rules[in_rule]['description'] }}</td>
+                        
+                        <td>
+                            <form action="/del_inbound" method="post">
+                                <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                                <input type="hidden" name="in_rule_num" value="{{ in_rule }}">
+                                <input class="btn_del" type="submit" value="Delete rule">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                
+            </table>
+            {% else %}
+            <table border="1">
+        
+                <thead>
+                    <tr>
+                        <th colspan="5">Inbound Rules</th>
+                    </tr>
+                    
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td colspan="5">No configured Inbound rules</td>
+                    </tr>
+                </tbody>
+                
+            </table>
+            {% endif %}
+    {% if outbound_rules %}
+    <table border="1">
+        
+        <thead>
+            <tr>
+                <th colspan="5">Outbound Rules</th>
+            </tr>
+            <tr>
+                <th>Rule number</th>
+                <th>Rule action</th>
+                <th>Protocol's port</th>
+                <th>Protocol's name (description)</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            {% for out_rule in outbound_rules %}
+            <tr>
+                <td>{{ out_rule }}</td>
+                <td>{{ outbound_rules[out_rule]['action'] }}</td>
+                <td>{{ outbound_rules[out_rule]['destination']['port'] }}</td>
+                <td>{{ outbound_rules[out_rule]['description'] }}</td>
+                
+                <td>
+                    <form action="/del_outbound" method="post">
+                        <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                        <input type="hidden" name="out_rule_num" value="{{ out_rule }}">
+                        <input class="btn_del" type="submit" value="Delete rule">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        
+    </table>
+    {% else %}
+    <table border="1">
+        
+        <thead>
+            <tr>
+                <th colspan="5">Outbound Rules</th>
+            </tr>
+            
+        </thead>
+        <tbody>
+            
+            <tr>
+                <td colspan="5">No configured Outbound rules</td>
+            </tr>
+        </tbody>
+        
+    </table>
+    {% endif %}
+    
+                   
+        
+        
+    {% else %}
+    <p>No Firewall service data available</p>
+    {% endif %} 
+
+    
+        
+    <div class="conf_min">
+        
+            <form action="/add_rule" method="post">
+                <div class="wrap">
+                    <h2>Configure rule</h2>
+                <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                <div class="input_box">
+                    <select name="rule_type">
+                        <option value="input">Inbound Rule</option>
+                        <option value="output">Outbound Rule</option>                       
+                    </select>
+                    <div class="sel">
+                        <i class='arrow-icon bx bx-chevron-down'></i>
+                        <i class='bx bxs-log-out-circle'></i>
+                    </div>
+                </div>
+
+                <div class="input_box">
+                    <input type="text" name="fire_rule_num" placeholder="Rule Number">
+                    <i class='bx bx-info-circle'></i>
+                </div>
+                
+                <div class="input_box">
+                    <select name="rule_act">
+                        <option value="accept">Accept</option>
+                        <option value="drop">Drop</option>                       
+                    </select>
+                    <div class="sel">
+                        <i class='arrow-icon bx bx-chevron-down'></i>
+                        <i class='bx bxs-traffic-barrier'></i>
+                    </div>
+                </div>
+                
+                <div class="input_box">
+                    <input type="text" name="prot_port" placeholder="Protocol's port">
+                    <i class='bx bx-anchor'></i>
+                </div>
+
+                <div class="input_box">
+                    <input type="text" name="rule_desc" placeholder="Protocol's name">
+                    <i class='bx bxs-detail'></i>
+                </div>
+                
+                <input type="submit" value="Configure rule" id="sub">
+                </div>
+                
+            </form>
+        </div>
+
+        <div id="saver">
+            
+            <form action="/save_config" method="post">
+                <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                <button type="submit"><i title="Save configuration" class='bx bx-save'></i></button>
+                
+            </form>
+            
+            
+        </div>
+        <div id="alert-container"></div>  
+          
+
+    </div>    
+        
+    
+    
+    
+    
+
+    <script>
+        
+        function showAlert(message, success) {
+            var alertDiv = document.createElement('div');
+            alertDiv.className = success ? 'alert-success' : 'alert-danger';
+            alertDiv.innerHTML = message;
+            document.getElementById('alert-container').appendChild(alertDiv);
+            setTimeout(function() {
+                alertDiv.remove();
+            }, 3000); 
+        }
+
+        
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        
+        var loader = document.createElement('div');
+        loader.className = 'loader';
+        document.getElementById('home_content').appendChild(loader);
+
+        var formData = new FormData(form);
+        var response = await fetch(form.action, {
+            method: form.method,
+            body: formData
+        });
+        var responseData = await response.json();
+        
+        
+        loader.remove();
+
+        
+        showAlert(responseData.message, responseData.success);
+    });
+});
+
+    </script>
+    <script>
+        let menu = document.querySelector('#menu')
+        let navbar = document.querySelector('.navbar')
+
+        menu.onclick = function(){
+            navbar.classList.toggle("active");
+        }
+    </script>
+</body>
+</html>

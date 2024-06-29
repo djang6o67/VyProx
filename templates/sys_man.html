@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VyProx | Users</title>
+    <link rel="icon" type="image/x-icon" sizes="32x32" href="{{ url_for('static', filename='css/VyProx-01.svg') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main1.css') }}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+    <div class="navbar">
+        
+            <img src="static\css\VyProx-07.svg" alt="">
+            <i class='bx bx-menu' id="menu"></i>
+        
+        
+        <ul class="navlsit">
+            <li>
+                
+                <a href="/index">
+                    <i class='bx bx-at'></i>
+                    <span class="links_name">Interfaces</span>
+                </a>
+            </li>
+            <li>
+                
+                <a href="/routing">
+                    <i class='bx bx-transfer-alt'></i>
+                    <span class="links_name">Routing</span>
+                </a>
+            </li>
+            <li>
+                
+                <a href="/nat">
+                    <i class='bx bxs-book-content'></i>
+                    <span class="links_name">NAT</span>
+                </a>
+            </li>
+            <li>
+                
+                <a href="/https">
+                    <i class='bx bx-code-alt'></i>
+                    <span class="links_name">API</span>
+                </a>
+            </li>
+            <li>            
+                <a href="/vpn">
+                    <i class='bx bx-wifi'></i>
+                    <span class="links_name">VPN</span>
+                </a>
+            </li>
+            <li>            
+                <a href="/firewall">
+                    <i class='bx bxs-hot'></i>
+                    <span class="links_name">Firewall</span>
+                </a>
+            </li>
+            <li>
+                
+                <a href="#">
+                    <i class='bx bxs-user'></i>
+                    <span class="links_name">Users</span>
+                </a>
+            </li>
+            <li>
+                
+                <a href="/ntp">
+                    <i class='bx bxs-time-five' ></i>
+                    <span class="links_name">NTP</span>
+                </a>
+            </li>
+            <li>
+                
+                <a href="/ssh">
+                    <i class='bx bxs-terminal'></i>
+                    <span class="links_name">SSH</span>
+                </a>
+            </li>
+            <li>
+                
+                <a href="/">
+                    <i class='bx bx-log-out-circle'></i>
+                    <span class="links_name">LogOut</span>
+                </a>
+            </li>
+        </ul>
+        
+        
+    </div>
+    <style>
+        body{
+            text-align: center;
+            overflow: hidden;
+        }
+        table{
+            text-align: center;
+            margin: auto;
+            table-layout: fixed; 
+            width: 600px; 
+            margin-top: 50px;
+        }
+        .home_content{
+            margin-top: 10px;
+        }
+        
+    </style>
+    <div class="home_content" id="home_content">
+        <h1>Users management</h1>
+        <table border="1" style="table-layout: fixed; 
+        width: 600px; ">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th style="width: 400px;">Password</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user, details in users.user.items() %}
+                    <tr>
+                        <td>{{ user }}</td>
+                        <td style="overflow-y: scroll; overflow-y: hidden">{{ details.authentication['encrypted-password'] }}</td>
+                        
+                        <td><form action="/del_user" method="post">
+                            <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                            <input type="hidden" name="username" value="{{ user }}">
+                            <input style="width: 75px;" class="btn_del" type="submit" value="Delete">
+                        </form></td>
+                    </tr>
+                {% endfor %}
+                                    
+            
+            </tbody>
+        </table>   
+
+        <div class="conf_min" id="conf_min">
+            
+                <form action="/set_user" method="post">
+                    <h2>Add user</h2>
+                    <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                    <div class="input_box">
+                        <input type="text" name="username" placeholder="Username" required>
+                        <i class='bx bx-user'></i>
+                    </div>
+                    <div class="input_box">
+                        <input type="text" name="password" placeholder="Password" required>
+                        <i class='bx bx-lock-alt'></i>
+                    </div>
+                    
+                    <input type="submit" value="Submit" id="sub">
+                </form>
+           
+        
+        
+    </div>
+    <div id="saver">
+            
+        <form action="/save_config" method="post">
+            <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+            <button type="submit"><i title="Save configuration" class='bx bx-save'></i></button>
+            
+        </form>
+        
+        
+    </div>
+    <div id="alert-container"></div>
+    </div>   
+    
+    
+    <script>
+        
+        function showAlert(message, success) {
+            var alertDiv = document.createElement('div');
+            alertDiv.className = success ? 'alert-success' : 'alert-danger';
+            alertDiv.innerHTML = message;
+            document.getElementById('alert-container').appendChild(alertDiv);
+            setTimeout(function() {
+                alertDiv.remove();
+            }, 3000); 
+        }
+
+        
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        
+        
+        var loader = document.createElement('div');
+        loader.className = 'loader';
+        document.getElementById('home_content').appendChild(loader);
+
+        var formData = new FormData(form);
+        var response = await fetch(form.action, {
+            method: form.method,
+            body: formData
+        });
+        var responseData = await response.json();
+        
+        
+        loader.remove();
+
+        
+        showAlert(responseData.message, responseData.success);
+    });
+});
+
+    </script>
+
+
+
+    <script>
+        let menu = document.querySelector('#menu')
+        let navbar = document.querySelector('.navbar')
+
+        menu.onclick = function(){
+            navbar.classList.toggle("active");
+        }
+    </script>
+</body>
+</html>

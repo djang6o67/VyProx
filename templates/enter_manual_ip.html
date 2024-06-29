@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VyProx | Access</title>
+    <link rel="icon" type="image/x-icon" sizes="32x32" href="{{ url_for('static', filename='css/VyProx-01.svg') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main1.css') }}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+</head>
+
+<body>
+    <style>
+        body{
+        text-align: center;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        height: auto;
+        
+    }
+    .contenu{
+        margin: auto;
+        position: relative;
+        bottom: 130px;
+        
+    }
+    img{
+        display: block;
+        width: 800px;
+        height: 400px;
+        padding: 0;
+        position: relative;
+        margin: auto;
+        bottom: 120px;
+    }
+    </style>
+    <img src="{{ url_for('static', filename='css/VyProx-07.svg') }}" alt="logol">
+    
+    <div class="contenu">
+        
+        <h1>Choose VM IP</h1>
+    
+
+    <div id="manual_ip_input" >
+        <form action="/submit_manual_ip" method="post">
+            
+            <div class="input_box">
+                
+                <input type="text" name="manual_ip" id="manual_ip" placeholder="Enter Manual IP Address" required>
+                <i class='bx bx-at'></i>
+            </div>
+            
+            <div id="key2" class="input_box">
+                <input type="text" name="key" placeholder="Enter the key" required>
+                <i class='bx bxs-key'></i>
+            </div>
+            
+            
+            <input type="submit" value="Submit" id="sub">
+        </form>
+        
+    </div>
+
+    </div>
+    
+    
+
+
+</body>
+</html>

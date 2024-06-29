@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VyProx | API</title>
+    <link rel="icon" type="image/x-icon" sizes="32x32" href="{{ url_for('static', filename='css/VyProx-01.svg') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main1.css') }}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+</head>
+
+<body>
+  <div class="navbar">
+        
+    <img src="static\css\VyProx-07.svg" alt="">
+    <i class='bx bx-menu' id="menu"></i>
+
+
+<ul class="navlsit">
+    <li>
+        
+        <a href="/index">
+            <i class='bx bx-at'></i>
+            <span class="links_name">Interfaces</span>
+        </a>
+    </li>
+    <li>
+        
+        <a href="/routing">
+            <i class='bx bx-transfer-alt'></i>
+            <span class="links_name">Routing</span>
+        </a>
+    </li>
+    <li>
+        
+        <a href="/nat">
+            <i class='bx bxs-book-content'></i>
+            <span class="links_name">NAT</span>
+        </a>
+    </li>
+    <li>
+        
+        <a href="#">
+            <i class='bx bx-code-alt'></i>
+            <span class="links_name">API</span>
+        </a>
+    </li>
+    <li>            
+        <a href="/vpn">
+            <i class='bx bx-wifi'></i>
+            <span class="links_name">VPN</span>
+        </a>
+    </li>
+    <li>            
+        <a href="/firewall">
+            <i class='bx bxs-hot'></i>
+            <span class="links_name">Firewall</span>
+        </a>
+    </li>
+    <li>
+                
+        <a href="/system_info">
+            <i class='bx bxs-user'></i>
+            <span class="links_name">Users</span>
+        </a>
+    </li>
+    <li>
+        
+        <a href="/ntp">
+            <i class='bx bxs-time-five' ></i>
+            <span class="links_name">NTP</span>
+        </a>
+    </li>
+    <li>
+        
+        <a href="/ssh">
+            <i class='bx bxs-terminal'></i>
+            <span class="links_name">SSH</span>
+        </a>
+    </li>
+    <li>
+        
+        <a href="/">
+            <i class='bx bx-log-out-circle'></i>
+            <span class="links_name">LogOut</span>
+        </a>
+    </li>
+</ul>
+</div>
+<style>
+    body{
+        text-align: center;
+        overflow: hidden;
+    }
+    table{
+        text-align: center;
+        margin: auto;
+        table-layout: fixed; 
+        width: 600px; 
+        margin-top: 50px;
+    }
+    .home_content{
+        margin-top: 10px;
+    }
+    
+</style>
+<div class="home_content">
+  <h1>HTTPS Service</h1>
+    {% if services_data.data.https.api.keys != None %}
+    <table border="1">
+        <thead>
+          <tr>
+            <th>API Key ID</th>
+            <th>API Key Value</th>
+            <th>Listen Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for key_id, key_data in https_data['data']['api']['keys']['id'].items() %}
+          <tr>
+            <td>{{ key_id }}</td>
+            <td>{{ key_data['key'] }}</td>
+            <td>{{ https_data['data']['listen-address'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+    <p>No HTTPS service data available</p>
+    {% endif %}
+</div>
+    
+<script>
+  let menu = document.querySelector('#menu')
+  let navbar = document.querySelector('.navbar')
+
+  menu.onclick = function(){
+      navbar.classList.toggle("active");
+  }
+</script>
+</body>
+</html>

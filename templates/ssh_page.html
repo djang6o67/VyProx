@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VyProx | SSH</title>
+    <link rel="icon" type="image/x-icon" sizes="32x32" href="{{ url_for('static', filename='css/VyProx-01.svg') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main1.css') }}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+
+<body>
+    <div class="navbar">
+        
+        <img src="static\css\VyProx-07.svg" alt="">
+        <i class='bx bx-menu' id="menu"></i>
+    
+    
+    <ul class="navlsit">
+        <li>
+            
+            <a title="Interfaces informations" href="/index">
+                <i class='bx bx-at'></i>
+                <span class="links_name">Interfaces</span>
+            </a>
+        </li>
+        <li>
+            
+            <a title="Routing informations" href="/routing">
+                <i class='bx bx-transfer-alt'></i>
+                <span class="links_name">Routing</span>
+            </a>
+        </li>
+        <li>
+            
+            <a title="NAT informationx" href="/nat">
+                <i class='bx bxs-book-content'></i>
+                <span class="links_name">NAT</span>
+            </a>
+        </li>
+        <li>
+            
+            <a title="API informations" href="/https">
+                <i class='bx bx-code-alt'></i>
+                <span class="links_name">API</span>
+            </a>
+        </li>
+        <li>            
+            <a href="/vpn">
+                <i class='bx bx-wifi'></i>
+                <span class="links_name">VPN</span>
+            </a>
+        </li>
+        <li>            
+            <a href="/firewall">
+                <i class='bx bxs-hot'></i>
+                <span class="links_name">Firewall</span>
+            </a>
+        </li>
+        <li>
+                
+            <a href="/system_info">
+                <i class='bx bxs-user'></i>
+                <span class="links_name">Users</span>
+            </a>
+        </li>
+        <li>
+            
+            <a title="NTP informations" href="/ntp">
+                <i class='bx bxs-time-five' ></i>
+                <span class="links_name">NTP</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="#">
+                <i class='bx bxs-terminal'></i>
+                <span class="links_name">SSH</span>
+            </a>
+        </li>
+        <li>
+            
+            <a title="Go back to login page" href="{{ url_for('enter_ip') }}">
+                <i class='bx bx-log-out-circle'></i>
+                <span class="links_name">LogOut</span>
+            </a>
+        </li>
+    </ul>
+    </div>
+    <style>
+        body{
+            text-align: center;
+            overflow: hidden;
+        }
+        table{
+            text-align: center;
+            margin: auto;
+            table-layout: fixed; 
+            width: 600px; 
+            margin-top: 40px;
+        }
+        .home_content{
+            margin-top: 10px;
+        }
+        
+    </style>
+    <div class="home_content" id="home_content">
+        <h1>SSH Service</h1>
+    {% if services_data.data.ssh != None %}
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Client Keepalive Interval</th>
+                <th>Listen address</th>
+                <th>Port</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ services_data.data.ssh['client-keepalive-interval'] }}</td>
+                {% if services_data.data.ssh['listen-address'] is string %}
+                    <td>{{ services_data.data.ssh['listen-address'] }}</td>
+                {% else %}
+                    <td>{{ services_data.data.ssh['listen-address']|join(' | ') }}</td>
+                {% endif %}
+                
+                <td>{{ services_data.data.ssh.port }}</td>
+                <td>
+                    <form action="/del_list_add" method="post">
+                        <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                        <input type="hidden" name="lis_add" value="{{ services_data.data.ssh['listen-address'] }}">
+                        <input style="width: 120px;" class="btn_del" type="submit" value="Delete Listen address">
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    {% else %}
+    <p>No NTP service data available</p>
+    {% endif %}
+
+    <div class="conf_min">
+        
+        <form action="/configure_ssh" method="post">
+            <div class="wrap">
+                <h2>Configure SSH listen address</h2>
+            <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+            <div class="input_box">
+                <input type="text" name="listen_add" placeholder="Listen address">
+                <i class='bx bx-at'></i>
+            </div>
+           
+                
+            </div>
+        
+            
+            <input type="submit" value="Configure SSH" id="sub">
+        </form>
+            
+            </div>
+            
+            <div id="saver">
+        
+                <form action="/save_config" method="post">
+                    <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                    <button type="submit"><i title="Save configuration" class='bx bx-save'></i></button>
+                    
+                </form>
+                
+                
+            </div>
+            <div id="alert-container"></div>
+    
+    
+</div>
+
+    
+    
+
+
+    <script>
+        
+        function showAlert(message, success) {
+            var alertDiv = document.createElement('div');
+            alertDiv.className = success ? 'alert-success' : 'alert-danger';
+            alertDiv.innerHTML = message;
+            document.getElementById('alert-container').appendChild(alertDiv);
+            setTimeout(function() {
+                alertDiv.remove();
+            }, 3000);
+        }
+
+       
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        
+        var loader = document.createElement('div');
+        loader.className = 'loader';
+        document.getElementById('home_content').appendChild(loader);
+
+        var formData = new FormData(form);
+        var response = await fetch(form.action, {
+            method: form.method,
+            body: formData
+        });
+        var responseData = await response.json();
+        
+        
+        loader.remove();
+
+        
+        showAlert(responseData.message, responseData.success);
+    });
+});
+
+    </script>
+    <script>
+        let menu = document.querySelector('#menu')
+        let navbar = document.querySelector('.navbar')
+
+        menu.onclick = function(){
+            navbar.classList.toggle("active");
+        }
+    </script>
+</body>
+</html>

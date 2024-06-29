@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VyProx | Interfaces</title>
+    <link rel="icon" type="image/x-icon" sizes="32x32" href="{{ url_for('static', filename='css/VyProx-01.svg') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main1.css') }}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" type="image/x-icon" sizes="32x32" href="{{ url_for('static', filename='css/VyProx-01.svg') }}">
+
+    <script>
+
+        function displayModal1() {
+            document.getElementById('modal1').style.display = 'block';
+        }
+        function closeModal1() {
+            document.getElementById('modal1').style.display = 'none';
+        }
+    </script>
+    <style>
+        
+        .modal1 {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: hidden; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            
+        }
+
+        
+        .modal-content1 {
+            background-color: rgba(255, 255, 255, 0.461);
+            backdrop-filter: blur(20px);
+            margin: 15% auto; 
+            padding: 20px 150px 20px 100px;
+            border: 1px solid #888;
+            border-radius: 10px;
+            width: 80%; 
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            
+            justify-content: space-between;
+        }
+        
+        .modal-content1 .close1{
+            position: relative;
+            bottom: 280px;
+            left: 420px;
+            font-size: 40px;
+        }
+
+        
+        .modal-content1 .close1:hover{
+            cursor:pointer;
+        
+        }
+        
+
+</style>
+    <script>
+        window.onload = function() {
+            setTimeout(function(){
+                window.alert('IMPORTANT : remember, if you delete the VyOS access IP, you have to logout and eventually access the router via another address !!!')
+            }, 1000)
+            
+            
+        }
+    </script>
+
+</head>
+
+<body>
+    <div class="navbar">
+        
+            <img src="static\css\VyProx-07.svg" alt="">
+            <i class='bx bx-menu' id="menu"></i>
+        
+        
+        <ul class="navlsit">
+            <li>
+                
+                <a href="#">
+                    <i class='bx bx-at'></i>
+                    <span class="links_name">Interfaces</span>
+                </a>
+            </li>
+            <li>
+                
+                <a href="/routing">
+                    <i class='bx bx-transfer-alt'></i>
+                    <span class="links_name">Routing</span>
+                </a>
+            </li>
+            <li>
+                
+                <a href="/nat">
+                    <i class='bx bxs-book-content'></i>
+                    <span class="links_name">NAT</span>
+                </a>
+            </li>
+            <li>
+                
+                <a href="/https">
+                    <i class='bx bx-code-alt'></i>
+                    <span class="links_name">API</span>
+                </a>
+            </li>
+            <li>            
+                <a href="/vpn">
+                    <i class='bx bx-wifi'></i>
+                    <span class="links_name">VPN</span>
+                </a>
+            </li>
+            <li>            
+                <a href="/firewall">
+                    <i class='bx bxs-hot'></i>
+                    <span class="links_name">Firewall</span>
+                </a>
+            </li>
+            <li>
+                
+                <a href="/system_info">
+                    <i class='bx bxs-user'></i>
+                    <span class="links_name">Users</span>
+                </a>
+            </li>
+            <li>
+                
+                <a href="/ntp">
+                    <i class='bx bxs-time-five' ></i>
+                    <span class="links_name">NTP</span>
+                </a>
+            </li>
+            <li>
+                
+                <a href="/ssh">
+                    <i class='bx bxs-terminal'></i>
+                    <span class="links_name">SSH</span>
+                </a>
+            </li>
+            <li>
+                
+                <a href="/">
+                    <i class='bx bx-log-out-circle'></i>
+                    <span class="links_name">LogOut</span>
+                </a>
+            </li>
+        </ul>
+        
+        
+    </div>
+    <style>
+        body{
+        text-align: center;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        height: auto;
+    }
+    </style>
+    <div class="home_content" id="home_content">
+
+        <h2>Network Interfaces</h2>
+        <!-- <span id="remember">IMPORTANT : remember, if you delete the VyOS access IP, you have to logout and eventually access the router via another IP</span> -->
+        <br>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Interface Name</th>
+                    <th>Address</th>
+                    <th>Description</th>
+                    <th colspan="2">Hardware ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for interface_name, interface_data in interfaces_data.data.ethernet.items() %}
+                
+                <tr>
+                        <td>{{ interface_name }}</td>
+                        <td>
+                            {% if interface_data.address is string %}
+                                {{ interface_data.address }}
+                            {% else %}
+                                {{ interface_data.address|join(' | ') }}
+                            {% endif %}
+                        </td>
+                        <td>{{ interface_data.description }}</td>
+                        <td colspan="2">{{ interface_data["hw-id"] }}</td>
+                    </tr>
+                
+                {% endfor %}
+                {% for interface_name, interface_data in interfaces_data.data.loopback.items() %}
+                    <tr>
+                        <td>{{ interface_name }}</td>
+                        <td>{{ interface_data.address }}</td>
+                        <td>{{ interface_data.description }}</td>
+                        <td colspan="2">/</td>
+                    </tr>
+                {% endfor %}
+                {% if 'tunnel' in interfaces_data.data %}
+                <tr>
+                    <th colspan="5">Interfaces tunnel</th>
+                </tr>
+                
+                <tr>
+                    <th>Interface Name</th>
+                    <th>Address</th>
+                    <th>Remote address</th>
+                    <th>Source address</th>
+                    <th>Action</th>
+                </tr>
+                
+                    {% for interface_name, interface_data in interfaces_data.data.tunnel.items() %}
+                    <tr>
+                        <td>{{ interface_name }}</td>
+                        <td>
+                            {% if interface_data.address is string %}
+                                {{ interface_data.address }}
+                            {% else %}
+                                {{ interface_data.address|join(' | ') }}
+                            {% endif %}
+                        </td>
+                        <td>{{ interface_data.remote }}</td>
+                        <td>{{ interface_data['source-address'] }}</td>
+                        <td>
+                            <form action="/delete_int_tun" method="post">
+                                <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                                <input type="hidden" name="del_tun_name" value="{{ interface_name }}">
+                                <input class="btn_del" type="submit" value="Delete interface">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                <tr>
+                    <th colspan="5">Interfaces tunnel</th>
+                    
+                </tr>
+                <tr>
+                    <td colspan="5">No tunnel interfaces are configured</td>
+                </tr>
+                {% endif %}
+                
+                
+                    
+            
+            </tbody>
+        </table>   
+
+    
+        <div class="conf" id="conf">
+            <div class="configure">
+                <form action="/configure_interface" method="post">
+                    <h2>Configure IP</h2>
+                    <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                    <div class="input_box">
+                    <select name="interface_name" id="interface_name">
+                        <option value="">Interface</option>
+                        {% for interface_name, interface_data in interfaces_data.data.ethernet.items() %}
+                            <option value="{{ interface_name }}">{{ interface_name }}</option>
+                        {% endfor %}
+                        {% for interface_name, interface_data in interfaces_data.data.loopback.items() %}
+                            <option value="{{ interface_name }}">{{ interface_name }}</option>
+                        {% endfor %}
+                        
+                        
+                    </select>
+                    <div class="sel">
+                        <i class='arrow-icon bx bx-chevron-down'></i>
+                        <i class='bx bxs-log-out-circle'></i>
+                    </div>
+                    
+                    </div>
+                    <div class="input_box">
+                        <input type="text" name="ip_address" placeholder="IP Address">
+                        <i class='bx bx-at'></i>
+                    </div>
+                    
+                    <input type="submit" value="Configure IP" id="sub">
+                </form>
+            </div>
+            
+            
+            
+            
+            <div class="delete">
+                <form action="/delete_ip" method="post">
+                    <h2>Delete IP</h2>
+                    
+                    <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                    <div class="input_box">
+                    <select name="interface_name">
+                        <option value="">Interface</option>
+                        {% for interface_name, interface_data in interfaces_data.data.ethernet.items() %}
+                            <option value="{{ interface_name }}">{{ interface_name }}</option>
+                        {% endfor %}
+                        {% for interface_name, interface_data in interfaces_data.data.loopback.items() %}
+                            <option value="{{ interface_name }}">{{ interface_name }}</option>
+                        {% endfor %}
+                        {% if 'tunnel' in interfaces_data.data %}
+                            {% for interface_name, interface_data in interfaces_data.data.tunnel.items() %}
+                                <option value="{{ interface_name }}">{{ interface_name }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                    <div class="sel">
+                        <i class='arrow-icon bx bx-chevron-down'></i>
+                        <i class='bx bxs-log-out-circle'></i>
+                    </div>
+                    
+                    </div>
+                    
+                    <div class="input_box">
+                        <input type="text" name="ip_address" placeholder="IP Address">
+                        <i class='bx bx-at'></i>
+                    </div>
+                    
+                    <input type="submit" value="Delete IP" id="sub">
+                </form>
+            </div>
+            <div class="desc">
+                <form action="/configure_desc" method="post">
+                    <h2>Configure description</h2>
+                    <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                    <div class="input_box">
+                    <select name="interface_name" id="interface_name">
+                        <option>Interface</option>
+                        {% for interface_name, interface_data in interfaces_data.data.ethernet.items() %}
+                            <option value="{{ interface_name }}">{{ interface_name }}</option>
+                        {% endfor %}
+                        {% for interface_name, interface_data in interfaces_data.data.loopback.items() %}
+                            <option value="{{ interface_name }}">{{ interface_name }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="sel">
+                        <i class='arrow-icon bx bx-chevron-down'></i>
+                        <i class='bx bxs-log-out-circle'></i>
+                    </div>
+                    
+                    </div>
+                    
+                    <div class="input_box">
+                        <input type="text" name="description" placeholder="Description">
+                        <i class='bx bx-detail'></i>
+                    </div>
+                    
+                    <input type="submit" value="Update description" id="sub">
+                </form>
+            </div>
+        </div>
+        
+        <div id="add_tun">        
+            <button onclick="displayModal1()"><i class='bx bxs-plus-square'></i></button>
+        </div>
+    
+        <div id="modal1" class="modal1">
+            <div class="modal-content1">              
+                
+                <h3 style="margin-left: 10px;">Add an interface</h3>
+                
+                    <form action="/add_int_tun" method="post">
+                        <div class="tun_form">
+                            <div class="box_inp">
+                                <input type="text" name="tun_name" placeholder="Interface tunnel name">
+                            </div>
+                            
+                            <div class="box_inp">
+                                <input type="text" name="tun_add" placeholder="Interface tunnel address">
+                            </div>
+    
+                            <div class="box_inp">
+                                <input type="text" name="remote_tun_address" placeholder="Interface tunnel remote address">
+                            </div>
+    
+                            <div class="box_inp">
+                                <input type="text" name="source_tun_address" placeholder="Interface tunnel source address">
+                            </div>             
+                            
+                            <input type="submit" value="Create interface" id="sub_tun">
+                        </div>
+                        
+                    </form>
+                    <span onclick="closeModal1()" class="close1">&times;</span>
+            </div>
+                
+                
+                
+            </div>
+            <div id="saver">
+            
+                <form action="/save_config" method="post">
+                    <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                    <button type="submit"><i title="Save configuration" class='bx bx-save'></i></button>
+                    
+                </form>
+                
+                
+            </div>
+            
+            <div id="alert-container"></div>
+        </div>
+
+        
+        
+
+    
+    
+    
+    
+    <script>
+        
+        function showAlert(message, success) {
+            var alertDiv = document.createElement('span');
+            alertDiv.className = success ? 'alert-success' : 'alert-danger';
+            alertDiv.innerHTML = message;
+            document.getElementById('alert-container').appendChild(alertDiv);
+            setTimeout(function() {
+                alertDiv.remove();
+            }, 3000); 
+        }
+
+        
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        
+        var loader = document.createElement('div');
+        loader.className = 'loader';
+        document.getElementById('home_content').appendChild(loader);
+
+        var formData = new FormData(form);
+        var response = await fetch(form.action, {
+            method: form.method,
+            body: formData
+        });
+        var responseData = await response.json();
+        
+        loader.remove();
+
+        showAlert(responseData.message, responseData.success);
+    });
+});
+
+    </script>
+
+
+
+    <script>
+        let menu = document.querySelector('#menu')
+        let navbar = document.querySelector('.navbar')
+
+        menu.onclick = function(){
+            navbar.classList.toggle("active");
+        }
+    </script>
+
+    
+</body>
+</html>

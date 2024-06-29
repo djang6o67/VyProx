@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VyProx | VPN</title>
+    <link rel="icon" type="image/x-icon" sizes="32x32" href="{{ url_for('static', filename='css/VyProx-01.svg') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main1.css') }}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    
+</head>
+
+<body>
+    <div class="navbar">
+        
+        <img src="static\css\VyProx-07.svg" alt="">
+        <i class='bx bx-menu' id="menu"></i>
+    
+    
+    <ul class="navlsit">
+        <li>
+            
+            <a href="/index">
+                <i class='bx bx-at'></i>
+                <span class="links_name">Interfaces</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="/routing">
+                <i class='bx bx-transfer-alt'></i>
+                <span class="links_name">Routing</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="nat">
+                <i class='bx bxs-book-content'></i>
+                <span class="links_name">NAT</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="/https">
+                <i class='bx bx-code-alt'></i>
+                <span class="links_name">API</span>
+            </a>
+        </li>
+        <li>            
+            <a href="#">
+                <i class='bx bx-wifi'></i>
+                <span class="links_name">VPN</span>
+            </a>
+        </li>
+        <li>            
+            <a href="/firewall">
+                <i class='bx bxs-hot'></i>
+                <span class="links_name">Firewall</span>
+            </a>
+        </li>
+        <li>
+                
+            <a href="/system_info">
+                <i class='bx bxs-user'></i>
+                <span class="links_name">Users</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="/ntp">
+                <i class='bx bxs-time-five' ></i>
+                <span class="links_name">NTP</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="/ssh">
+                <i class='bx bxs-terminal'></i>
+                <span class="links_name">SSH</span>
+            </a>
+        </li>
+        <li>
+            
+            <a href="/">
+                <i class='bx bx-log-out-circle'></i>
+                <span class="links_name">LogOut</span>
+            </a>
+        </li>
+    </ul>  
+    
+</div>
+<style>
+    body{
+        text-align: center;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        height: auto;
+    }
+    
+    table{
+        text-align: center;
+        margin: auto;
+        table-layout: fixed; 
+        width: 600px; 
+        margin-top: 40px;
+    }
+    .home_content{
+        margin-top: 10px;
+    }
+    #saver{
+        bottom: 560px;
+        left: 10px;
+    }
+    
+</style>
+<div class="home_content" id="home_content">
+    <h1>VPN informations</h1>
+    {% if vpn_data %}
+    
+        {% if authentications %}
+        
+        <table border="1">
+            
+            <thead>
+                
+                <tr>
+                    <th colspan="4">Auhtentications</th>
+                </tr>
+                
+                <tr>
+                    <th>Authentication name</th>
+                    <th>Authentified IDs</th>
+                    <th>Authentication secret key</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for authentication in authentications %}
+                <tr>
+                    <td>{{ authentication }}</td>
+                    {% if  authentications[authentication]['id'] is string %}
+                        <td>{{ authentications[authentication]['id'] }}</td>
+                    {% else %}
+                        <td>{{ authentications[authentication]['id']|join(' | ') }}</td>
+                    {% endif %}
+                    
+                    <td>{{ authentications[authentication]['secret'] }}</td>
+                    <td>
+                        <form action="/del_auth" method="post">
+                            <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                            <input type="hidden" name="auth_name" value="{{ authentication }}">
+                            <input class="btn_del" type="submit" value="Delete">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            
+        </table>
+
+        {% else %}
+        <table border="1">
+            
+            <thead>
+                
+                <tr>
+                    <th colspan="4">Auhtentications</th>
+                </tr>
+                
+                <tr>
+                    <td style="text-align: center;" colspan="4">No authentication instance is configured</td>
+                </tr>
+        </table>
+        {% endif %}
+
+        {% if peers %}
+        <table border="1">
+            <tbody>
+                <tr>
+                    <th colspan="6">Peers</th>
+                </tr>
+                <tr>
+                    <th>Peer name</th>
+                    <th>Peer remote ID</th>
+                    <th>Peer remote address</th>
+                    <th>Peer local address</th>
+                    <th>Tunnel name</th>
+                    <th>Action</th>
+                </tr>
+                
+                    {% for peer in peers %}
+                    <tr>
+                        <td>{{ peer }}</td>
+                        <td>{{ peers[peer]['authentication']['remote-id'] }}</td>
+                        <td>{{ peers[peer]['remote-address'] }}</td>
+                        <td>{{ peers[peer]['local-address'] }}</td>
+                        {% for tunnel in peers[peer]['tunnel'] %}
+                            <td>{{ tunnel }}</td>
+                        {% endfor %}
+                        <td>
+                            <form action="/del_peer" method="post">
+                                <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                                <input type="hidden" name="peer_del" value="{{ peer }}">
+                                <input style="width: 80px;" class="btn_del" type="submit" value="Delete peer">
+                            </form>
+                        </td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+        {% else %}
+        <table border="1">
+            
+            <thead>
+                
+                <tr>
+                    <th colspan="6">Peers</th>
+                </tr>
+                
+                <tr>
+                    <td style="text-align: center;" colspan="6">No VPN peer is configured</td>
+                </tr>
+        </table>
+        {% endif %}    
+    
+    
+                   
+        
+        
+    {% else %}
+    <table border="1">
+            
+        <thead>
+            
+            <tr>
+                <th colspan="4">Auhtentications</th>
+            </tr>
+            
+            <tr>
+                <td style="text-align: center;" colspan="4">No authentication instance is configured</td>
+            </tr>
+    </table>
+
+    <table border="1">
+            
+        <thead>
+            
+            <tr>
+                <th colspan="6">Peers</th>
+            </tr>
+            
+            <tr>
+                <td style="text-align: center;" colspan="6">No VPN peer is configured</td>
+            </tr>
+    </table>
+    {% endif %} 
+
+    
+        
+    <div class="conf">
+        <div class="auth_conf">
+            <form action="/configure_authentication" method="post">
+                <div class="wrap">
+                    <h2>Configure authentication</h2>
+                <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                <div class="input_box">
+                    <input type="text" name="authentication_name" placeholder="Authentication name">
+                    <i class='bx bx-detail'></i>
+                </div>
+                <div class="input_box">
+                    <input type="text" name="authentified_id1" placeholder="Authentified ID">
+                    <i class='bx bxs-check-shield'></i>
+                </div>
+                <div class="input_box">
+                    <input type="text" name="authentified_id2" placeholder="Authentified ID">
+                    <i class='bx bxs-check-shield'></i>
+                </div>
+                
+                <div class="input_box">
+                    <input type="text" name="secret_key" placeholder="Secret key">
+                    <i class='bx bxs-key'></i>
+                </div>
+                
+                <input type="submit" value="Configure Auhtentication" id="sub">
+                </div>
+                
+            </form>
+        </div>
+
+
+        <div class="peer_conf">
+            <form action="/configure_peer" method="post">
+                <div class="wrap">
+                    <h2>Peer configuration</h2>
+                <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+                <div class="input_box">
+                    <input type="text" name="peer_name" placeholder="Peer name">
+                    <i class='bx bx-anchor' ></i>
+                </div>
+                <div class="input_box">
+                    <input type="text" name="remote_peer_id" placeholder="Remote peer ID ">
+                    <i class='bx bxs-check-shield'></i>
+                </div>
+                <div class="input_box">
+                    <input type="text" name="remote_peer_address" placeholder="Remote peer address">
+                    <i class='bx bx-fast-forward'></i>
+                </div>
+                
+                <div class="input_box">
+                    <input type="text" name="local_peer_address" placeholder="Local peer address">
+                    <i class='bx bxs-map'></i>
+                </div>
+                <div class="input_box">
+                    <input type="text" name="tunnel_id" placeholder="Tunnel ID">
+                    <i class='bx bx-info-circle'></i>
+                </div>
+                <input type="submit" value="Configure Peer" id="sub">
+                </div>
+                
+            </form>
+        </div>            
+
+    </div>    
+
+    
+
+    <div id="saver">
+            
+        <form action="/save_config" method="post">
+            <input type="hidden" name="vyos_ip" value="{{ vyos_ip }}">
+            <button type="submit"><i title="Save configuration" class='bx bx-save'></i></button>
+            
+        </form>
+        
+        
+    </div>
+    <div id="alert-container"></div>  
+    
+    </div>
+    
+
+    <script>
+        
+        function showAlert(message, success) {
+            var alertDiv = document.createElement('div');
+            alertDiv.className = success ? 'alert-success' : 'alert-danger';
+            alertDiv.innerHTML = message;
+            document.getElementById('alert-container').appendChild(alertDiv);
+            setTimeout(function() {
+                alertDiv.remove();
+            }, 3000); 
+        }
+
+        
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        
+        var loader = document.createElement('div');
+        loader.className = 'loader';
+        document.getElementById('home_content').appendChild(loader);
+
+        var formData = new FormData(form);
+        var response = await fetch(form.action, {
+            method: form.method,
+            body: formData
+        });
+        var responseData = await response.json();
+        
+        
+        loader.remove();
+
+        
+        showAlert(responseData.message, responseData.success);
+    });
+});
+
+    </script>
+    <script>
+        let menu = document.querySelector('#menu')
+        let navbar = document.querySelector('.navbar')
+
+        menu.onclick = function(){
+            navbar.classList.toggle("active");
+        }
+    </script>
+</body>
+</html>
