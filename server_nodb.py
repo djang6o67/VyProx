@@ -8,30 +8,7 @@ import urllib3
 import requests
 app = Flask(__name__)
 app.secret_key = 'wail'
-# def fetch_vm_info():
-#     try:
-#         # Connect to the MySQL database
-#         db_connection = mysql.connector.connect(
-#             host="localhost",
-#             user="root",
-#             password="",
-#             database="vm_ips"
-#         )
-#         db_connection.cmd_refresh(RefreshOption.TABLES)
-#         db_cursor = db_connection.cursor()
 
-#         # Fetch VM information from the database
-#         db_cursor.execute("SELECT vm_id, vm_name, ip_address FROM vm_ip_addresses")
-#         vm_info = [(row[0], row[1], row[2]) for row in db_cursor.fetchall()]
-        
-#         # Close the database connection
-#         db_cursor.close()
-#         db_connection.close()
-
-#         return vm_info
-#     except mysql.connector.Error as e:
-#         print("Error fetching VM information from the database:", e)
-#         return None
 
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
