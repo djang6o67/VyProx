@@ -1,10 +1,10 @@
 import scripts.retrieve_data as retrieve_data
 
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session
-import mysql.connector
+
 import time
 import urllib3
-from mysql.connector import RefreshOption
+
 import requests
 app = Flask(__name__)
 app.secret_key = 'wail'
